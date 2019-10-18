@@ -136,8 +136,10 @@ classifier.fit(train_arrays, train_labels)
 #           intercept_scaling=1, penalty='l2', random_state=None, tol=0.0001)
 
 log.info(classifier.score(test_arrays, test_labels))
-log.info(classifier.f1_score(test_arrays, test_labels))
+dump(classifier, 'classifier.joblib')
 
+f1_score(test_arrays, test_labels, average="macro")
+print(precision_score(test_arrays, test_labels, average="macro"))
+print(recall_score(test_arrays, test_labels, average="macro"))   
 
-dump(classifier, 'classifier.joblib') 
 #classifier = load('classifier.joblib') 

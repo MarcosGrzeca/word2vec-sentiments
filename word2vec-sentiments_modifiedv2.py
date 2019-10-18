@@ -75,13 +75,13 @@ marcos = train_sentences.to_array()
 
 
 log.info('D2V')
-model = Doc2Vec(min_count=1, window=10, vector_size=150, sample=1e-4, negative=5, workers=7,iter=40)
+model = Doc2Vec(min_count=1, window=10, vector_size=150, sample=1e-4, negative=5, workers=100,iter=40)
 model.build_vocab(train_sentences.to_array())
 
 log.info('Epoch')
 
 # log.info('EPOCH: {}'.format(epoch))
-model.train(train_sentences.sentences_perm(),total_examples=model.corpus_count,epochs=model.iter)
+model.train(train_sentences.sentences_perm(),total_examples=model.corpus_count,epochs=model.epochs)
 
 log.info('Model Save')
 model.save('./imdbcv2.d2v')

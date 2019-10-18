@@ -16,6 +16,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import confusion_matrix
 
 import logging
 import sys
@@ -153,3 +154,8 @@ print(precision_score(test_arrays, test_labels, average="macro"))
 print(recall_score(test_arrays, test_labels, average="macro"))   
 
 #classifier = load('classifier.joblib') 
+
+matrix = confusion_matrix(test_arrays, test_labels)
+print(matrix)
+
+#https://machinelearningmastery.com/how-to-calculate-precision-recall-f1-and-more-for-deep-learning-models/

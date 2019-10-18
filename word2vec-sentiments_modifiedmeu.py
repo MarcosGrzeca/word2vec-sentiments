@@ -103,7 +103,7 @@ for index in range(452):
     prefix_train_neg = 'TRAIN_NEG_' + str(index)
     train_arrays[i] = model.docvecs[prefix_train_neg]
     train_labels[i] = 0
-    i++
+    i = i +1
 
 test_arrays = numpy.zeros((406, 150))
 test_labels = numpy.zeros(406)
@@ -121,8 +121,7 @@ for index in range(113):
     prefix_test_pos = 'TEST_NEG_' + str(index)
     test_arrays[i] = model.docvecs[prefix_test_pos]
     test_labels[i] = 0
-    i++
-
+    i = i +1
 
 log.info('Fitting')
 classifier = LinearSVC()

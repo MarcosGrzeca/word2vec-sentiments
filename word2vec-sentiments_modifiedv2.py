@@ -84,8 +84,8 @@ log.info('Epoch')
 model.train(train_sentences.sentences_perm(),total_examples=model.corpus_count,epochs=model.iter)
 
 log.info('Model Save')
-model.save('./imdbc.d2v')
-model = Doc2Vec.load('./imdbc.d2v')
+model.save('./imdbcv2.d2v')
+model = Doc2Vec.load('./imdbcv2.d2v')
 
 log.info('Sentiment')
 train_arrays = numpy.zeros((25000, 150))

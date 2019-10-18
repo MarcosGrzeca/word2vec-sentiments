@@ -12,6 +12,10 @@ import numpy
 # classifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import  LinearSVC
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import precision_recall_fscore_support
 
 import logging
 import sys
@@ -75,7 +79,7 @@ marcos = train_sentences.to_array()
 
 
 log.info('D2V')
-model = Doc2Vec(min_count=1, window=10, vector_size=150, sample=1e-4, negative=5, workers=50,epochs=40)
+model = Doc2Vec(min_count=1, window=10, vector_size=150, sample=1e-4, negative=5, workers=50,epochs=20)
 model.build_vocab(train_sentences.to_array())
 
 log.info('Epoch')
@@ -138,7 +142,13 @@ classifier.fit(train_arrays, train_labels)
 log.info(classifier.score(test_arrays, test_labels))
 dump(classifier, 'classifier.joblib')
 
-f1_score(test_arrays, test_labels, average="macro")
+print(precision_recall_fscore_support(test_arrays, test_labels, average='micro'))
+
+print(f1_score(test_arrays, test_labels, average="macro"))
+
+print(f1_score(test_arrays, test_labels, average="micro"))
+
+print(f1_score(test_arrays, test_labels, average="weighted"))
 print(precision_score(test_arrays, test_labels, average="macro"))
 print(recall_score(test_arrays, test_labels, average="macro"))   
 

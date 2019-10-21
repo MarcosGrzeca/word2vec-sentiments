@@ -18,6 +18,12 @@ from sklearn.metrics import recall_score
 from sklearn.metrics import precision_recall_fscore_support
 from sklearn.metrics import confusion_matrix
 
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_validate
+from sklearn.model_selection import train_test_split
+
+from sklearn import svm
+
 import logging
 import sys
 
@@ -112,8 +118,10 @@ for i in range(12500):
 
 
 log.info('Fitting')
-classifier = LinearSVC()
-classifier.fit(train_arrays, train_labels)
+#classifier = LinearSVC(max_iter = 2000)
+#classifier = LinearSVC(max_iter = 2000, kernel = "poly")
+#classifier = svm.SVC(max_iter = 2000, kernel = "poly")
+classifier = svm.SVC(kernel = "poly")
 
 #numpy.savetxt("kagggle_train_LogisticRegression_labels.csv", numpy.asarray(train_labels), delimiter=",")
 #numpy.savetxt("kagggle_teste_LogisticRegression_labels.csv", numpy.asarray(test_labels), delimiter=",")
@@ -124,28 +132,16 @@ classifier.fit(train_arrays, train_labels)
 # LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,
 #           intercept_scaling=1, penalty='l2', random_state=None, tol=0.0001)
 
-scores = cross_val_score(clf, iris.data, iris.target, cv=5, scoring='f1_macro')
+scoring = {
+    'f1_macro': 'f1_macro',
+    'f1_micro': 'f1_micro',
+    'prec_macro': 'precision_macro',
+    'rec_macro': 'recall_macro'
+}
 
+#scores = cross_val_score(classifier, train_arrays, train_labels, cv=5, scoring=scoring, return_train_score=true)
+scores = cross_validate(classifier, train_arrays, train_labels, cv=5, scoring=scoring)
 
-final = classifier.predict(test_arrays)
-
-log.info(classifier.score(test_arrays, test_labels))
-dump(classifier, 'classifier.joblib')
-
-print(precision_recall_fscore_support(final, test_labels, average='micro'))
-print(precision_recall_fscore_support(final, test_labels, average='micro'))
-
-print(f1_score(final, test_labels, average="macro"))
-
-print(f1_score(final, test_labels, average="micro"))
-
-print(f1_score(final, test_labels, average="weighted"))
-print(precision_score(final, test_labels, average="macro"))
-print(recall_score(final, test_labels, average="macro"))   
-
-#classifier = load('classifier.joblib') 
-
-matrix = confusion_matrix(final, test_labels)
-print(matrix)
-
-#https://machinelearningmastery.com/how-to-calculate-precision-recall-f1-and-more-for-deep-learning-models/
+print(scores.keys())
+print(scores['test_f1_macro'])
+print(scores['test_f1_micro'])

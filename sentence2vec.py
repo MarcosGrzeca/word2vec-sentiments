@@ -1,7 +1,7 @@
 # gensim modules
 from gensim import utils
 from gensim.models.doc2vec import TaggedDocument
-from gensim.models import Doc2Vec
+from gensim.models import Sent2Vec
 
 # random
 import random
@@ -76,7 +76,7 @@ train_sentences = TaggedLineSentence(train_source)
 test_sentences = TaggedLineSentence(test_source)
 
 log.info('D2V')
-model = Doc2Vec(min_count=1, window=10, vector_size=150, sample=1e-4, negative=5, workers=10,epochs=40)
+model = Sent2Vec(min_count=1, window=10, vector_size=150, sample=1e-4, negative=5, workers=10,epochs=40)
 model.build_vocab(train_sentences.to_array())
 
 log.info('Epoch')
@@ -85,8 +85,8 @@ log.info('Epoch')
 model.train(train_sentences.sentences_perm(),total_examples=model.corpus_count,epochs=model.epochs)
 
 log.info('Model Save')
-model.save('./rezando.d2v')
-model = Doc2Vec.load('./rezando.d2v')
+model.save('./sentence.d2v')
+model = Sent2Vec.load('./sentence.d2v')
 
 log.info('Sentiment')
 train_arrays = numpy.zeros((1624, 150))
@@ -137,22 +137,8 @@ classifier.fit(train_arrays, train_labels)
 final = classifier.predict(test_arrays)
 
 log.info(classifier.score(test_arrays, test_labels))
-dump(classifier, 'classifier.joblib')
+dump(classifier, 'senentece_classifier.joblib')
 
-print(precision_recall_fscore_support(final, test_labels, average='micro'))
-print(precision_recall_fscore_support(final, test_labels, average='micro'))
-
-print(f1_score(final, test_labels, average="macro"))
-
-print(f1_score(final, test_labels, average="micro"))
-
-print(f1_score(final, test_labels, average="weighted"))
-print(precision_score(final, test_labels, average="macro"))
-print(recall_score(final, test_labels, average="macro"))   
-
-#classifier = load('classifier.joblib') 
-
-matrix = confusion_matrix(final, test_labels)
-print(matrix)
-
-#https://machinelearningmastery.com/how-to-calculate-precision-recall-f1-and-more-for-deep-learning-models/
+print(f1_score(final, test_labels, pos_label=1, average="binary"))
+print(precision_score(final, test_labels, pos_label=1, average="binary"))
+print(recall_score(final, test_labels, pos_label=1, average="binary"))
